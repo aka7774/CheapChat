@@ -82,15 +82,14 @@ def chat(args: dict):
     if 'model_name' in args and loaded_model_name != args['model_name']:
         model_set(args['model_name'])
 
+    print(args['input'])
+
     begin = datetime.datetime.now()
 
+    config.update(args)
+    tprompt = config['template'].format(bos_token=tokenizer.bos_token, system=config['system'], prompt=config['prompt'], input=args['input'])
+
     kwargs = config.copy()
-    kwargs.update(args)
-
-    print(kwargs['input'])
-
-    tprompt = kwargs['template'].format(bos_token=tokenizer.bos_token, system=kwargs['system'], prompt=kwargs['prompt'], input=kwargs['input'])
-
     for k in ['model_name', 'template', 'system', 'prompt', 'input']:
         if k in kwargs:
             del kwargs[k]
