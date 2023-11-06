@@ -1,0 +1,3 @@
+{bos_token}[INST] <<SYS>>
+{system}
+<</SYS>>{prompt} [/INST] 
