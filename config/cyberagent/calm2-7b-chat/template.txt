@@ -1,2 +1,2 @@
-USER: AIによって私達の暮らしはどのように変わりますか？
+USER: {input}
 ASSISTANT: 
