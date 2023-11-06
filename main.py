@@ -106,11 +106,12 @@ def chat(args: dict):
         )
     output = tokenizer.decode(output_ids.tolist()[0][token_ids.size(1) :], skip_special_tokens=True)
 
+    print(config)
+
     print(output)
 
     content = trim_output(output)
 
-    print(content)
     print(datetime.datetime.now() - begin)
     
     return content
