@@ -26,20 +26,46 @@ app.add_middleware(
     allow_headers=["*"],
     )
 
-def model_set(model_name):
+def model_set(model_name, dtype = 'int4'):
     global tokenizer, model, loaded_model_name, config, tsv
 
-    quantization_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_compute_dtype=torch.bfloat16
-    )
-
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        device_map="auto",
-        quantization_config=quantization_config,
-    )
+    
+    if dtype == 'int4':
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            device_map="auto",
+            quantization_config=BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_compute_dtype=torch.bfloat16,
+            ),
+        )
+    elif dtype == 'int8':
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            device_map="auto",
+            quantization_config=BitsAndBytesConfig(
+                torch_dtype=torch.int8,
+                load_in_8bit=True,
+            ),
+        )
+    elif dtype == 'fp16':
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            device_map="auto",
+            torch_dtype=torch.float16,
+        )
+    elif dtype == 'bf16':
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            device_map="auto",
+            torch_dtype=torch.bfloat16,
+        )
+    else:
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            device_map="auto",
+        )
 
     loaded_model_name = model_name
 
@@ -80,7 +106,10 @@ def chat(args: dict):
     global tokenizer, model, loaded_model_name, config, tsv
     
     if 'model_name' in args and loaded_model_name != args['model_name']:
-        model_set(args['model_name'])
+        if 'dtype' in args:
+            model_set(args['model_name'], args['dtype'])
+        else:
+            model_set(args['model_name'])
 
     print(args['input'])
 
@@ -104,7 +133,8 @@ def chat(args: dict):
             eos_token_id=tokenizer.eos_token_id,
             **kwargs,
         )
-    output = tokenizer.decode(output_ids.tolist()[0][token_ids.size(1) :], skip_special_tokens=True)
+    out = output_ids.tolist()[0][token_ids.size(1) :]
+    output = tokenizer.decode(out, skip_special_tokens=True)
 
     print(config)
 
@@ -122,4 +152,4 @@ async def api_chat(args: dict) -> Response:
 
 
 # init
-model_set('elyza/ELYZA-japanese-Llama-2-7b-fast-instruct')
+model_set('elyza/ELYZA-japanese-Llama-2-7b-fast-instruct', 'int8')
