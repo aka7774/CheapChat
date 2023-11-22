@@ -9,17 +9,34 @@ AI VTuberに喋らせるためのWebAPIが欲しいし、モデルは起動時�
 
 # 使い方
 
+```bash
+git clone https://github.com/aka7774/CheapChat
+cd CheapChat
+```
+
+## gradio
+
+プロンプトいじるテスト用なので運用では使わない。
+
+```bash
+bash venv.sh
+```
+
+```bash
+venv/bin/python app.py
+```
+
+## WebAPI
+
 - 初回起動時にvenv作ってくれる
 - 引数にはポート番号を入れる
 - 最初から読んで欲しいモデルがあったらmain.pyの末尾に書く
 
 ```bash
-git clone https://github.com/aka7774/CheapChat
-cd CheapChat
 bash run.sh 50000
 ```
 
-## /api/chat
+### /api/chat
 
 POST json
 
@@ -27,6 +44,7 @@ POST json
 - model_name 任意 hugのリポジトリ
   - あとは config ファイルを読み込んだりPOSTで上書きしたり
   - template, system, prompt
+- dtype int4 int8 fp16 BnBで量子化します
 
 エンドポイントは一個だけ
 
@@ -34,11 +52,9 @@ POST json
 
 - WSL2しか対応する気ないけどWindowsでも動くかもしれない
 - transformersで簡単に動かせるサンプルコードつきのものしか対応する気は無い
-- int4固定です(13Bブームが来るかint8との差が大きければ考え直す)
 - 複数モデルのロードは必要になったら対応するかも
 - CPUには対応しません(正確な回答を長時間待つ使い方は対象外)
 - streamingには対応しません(同じGPUで即座に音声合成やるから)
-- gradio実装はしません(spaceを有料レンタルする時が来たら考える)
 - 非セキュアです(サーバ公開や複数人での同時使用は対象外)
 
 # 競合(上位版)
