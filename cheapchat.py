@@ -22,6 +22,9 @@ def model_set(model_name, dtype = 'int4'):
     if loaded_model_name == model_name and loaded_dtype == dtype:
         return
 
+    model = None
+    torch.cuda.empty_cache()
+
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     
     if dtype == 'int4':
@@ -95,6 +98,7 @@ def model_set(model_name, dtype = 'int4'):
         )
 
     loaded_model_name = model_name
+    loaded_dtype = dtype
 
     dir = f"config/{model_name}"
     if os.path.exists(dir):
