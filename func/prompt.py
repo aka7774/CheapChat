@@ -20,7 +20,7 @@ def comment(s):
 def test(s):
     return s if cfg['is_test'] else ''
 
-def msg(v: str | list):
+def msgf(v: str | list):
     msgs = []
 
     a = []
@@ -74,8 +74,8 @@ def llm(dir, **kwargs):
         return ''
 
 def infer_prompt(instruction, input = '', opt = {}):
-    vars = func.var.load_vars()
-    vars = SimpleNamespace(**vars)
+    var = func.var.load_vars()
+    var = SimpleNamespace(**var)
 
     args = opt.copy()
     args['instruction'] = eval("f'''" + instruction + "'''")
