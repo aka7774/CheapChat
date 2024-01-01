@@ -64,19 +64,11 @@ def rag(dir, query):
         print(e)
         return ''
 
-def llm(dir, **kwargs):
-    try:
-        args = dict(kwargs)
-        args['dir'] = dir
-        return infer(args)
-    except Exception as e:
-        print(e)
-        return ''
-
 def infer_prompt(instruction, input = '', opt = {}):
     var = func.var.load_vars()
     var = SimpleNamespace(**var)
 
+    del opt['dir']
     args = opt.copy()
     args['instruction'] = eval("f'''" + instruction + "'''")
     args['input'] = input
@@ -91,15 +83,15 @@ def infer_prompt(instruction, input = '', opt = {}):
         messages = prompt_to_messages(args['instruction'])
         return func.chatgpt.infer(messages), json.dumps(messages)
 
+def llm(dir, input = '', **kwargs):
+    instruction = load_prompt(dir)
+    opt = load_options(dir)
+    opt.update(dict(kwargs))
+
+    return infer_prompt(instruction, input, opt)
+
 def infer(args: dict):
-    instruction = load_prompt(args['dir'])
-    opt = load_options(args['dir'])
-    opt.update(args)
-
-    del opt['dir']
-    del opt['input']
-
-    return infer_prompt(instruction, args['input'], opt)
+    return llm(args['dir'], args['input'], args)
 
 def prompt_to_messages(prompt):
     msgs = []
