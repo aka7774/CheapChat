@@ -92,7 +92,7 @@ def gr_tab_prompt(gr):
 
                     dtype = gr.Dropdown(
                         value=opt['dtype'],
-                        choices=['int4','int8','fp16'],
+                        choices=['int4','int8','fp16', 'bf16'],
                         label='dtype',
                         show_label=True,
                         interactive=True,

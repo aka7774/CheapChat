@@ -39,7 +39,7 @@ def model_set(model_name, dtype = 'int4'):
             quantization_config=BitsAndBytesConfig(
                 load_in_4bit=True,
                 bnb_4bit_compute_dtype=torch.bfloat16,
-                load_in_8bit_fp32_cpu_offload=True,
+                attn_implementation="flash_attention_2",
             ),
         )
     elif dtype == 'int8':
@@ -50,7 +50,7 @@ def model_set(model_name, dtype = 'int4'):
             quantization_config=BitsAndBytesConfig(
                 torch_dtype=torch.bfloat16,
                 load_in_8bit=True,
-                load_in_8bit_fp32_cpu_offload=True,
+                attn_implementation="flash_attention_2",
             ),
         )
     elif dtype == 'fp16':
@@ -59,6 +59,7 @@ def model_set(model_name, dtype = 'int4'):
             device_map="auto",
             trust_remote_code=True,
             torch_dtype=torch.float16,
+            attn_implementation="flash_attention_2",
         )
     elif dtype == 'bf16':
         model = AutoModelForCausalLM.from_pretrained(
@@ -66,6 +67,7 @@ def model_set(model_name, dtype = 'int4'):
             device_map="auto",
             trust_remote_code=True,
             torch_dtype=torch.bfloat16,
+            attn_implementation="flash_attention_2",
         )
     else:
         model = AutoModelForCausalLM.from_pretrained(

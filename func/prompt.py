@@ -68,7 +68,8 @@ def infer_prompt(instruction, input = '', opt = {}):
     var = func.var.load_vars()
     var = SimpleNamespace(**var)
 
-    del opt['dir']
+    if 'dir' in opt:
+        del opt['dir']
     args = opt.copy()
     args['instruction'] = eval("f'''" + instruction + "'''")
     args['input'] = input
