@@ -1,7 +1,0 @@
-{system}
-{prompt}
-
-### Input:
-{input}
-
-### Output: 

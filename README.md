@@ -1,22 +1,29 @@
-# CheapChat
-Server to run new LLM for transformers with fastapi
+# akachat
 
-# 使途
+あかちゃんチャット
 
-新しい日本語LLMが出ましたー！　早速Colabで動かしてみましたー！　まではいいけど、ローカルで使うのがめんどくさいよね
+# 要件
 
-AI VTuberに喋らせるためのWebAPIが欲しいし、モデルは起動時にロードしといて、返事はすぐにして欲しい
+- 新しいローカルLLM(transformersで動くやつ)をすぐ試したい
+- AI VTuberに喋らせるためのWebAPIが欲しい
+- playgroundの中から関数を呼び出したい
 
-# 使い方
+## 対応環境
+
+CUDA必須です。
+
+- WSL2 Ubuntu 22.04 動作確認済み
+- Windows 導入できれば動く
+- Linux たぶん動くけど動作未確認
+
+# 導入
 
 ```bash
-git clone https://github.com/aka7774/CheapChat
-cd CheapChat
+git clone https://github.com/aka7774/akachat
+cd akachat
 ```
 
-## gradio
-
-プロンプトいじるテスト用なので運用では使わない。
+# gradio
 
 ```bash
 bash venv.sh
@@ -26,47 +33,87 @@ bash venv.sh
 venv/bin/python app.py
 ```
 
-## WebAPI
+## prompt
 
-- 初回起動時にvenv作ってくれる
-- 引数にはポート番号を入れる
-- 最初から読んで欲しいモデルがあったらmain.pyの末尾に書く
+- プロンプトtxtと設定jsonのペア
+- prompt/{name}.txt prompt/{name}.json に save できる
+  - save したものを WebAPI から呼び出せる
+- instruction は Llama2 や ChatGPT の system と同じ意味
+- input はユーザーの入力文字列
+
+### Prompt Options
+
+- Location ローカルLLMかWebサービス(今はOpenAIだけ)を指定する
+- model モデル名 Huggingface形式
+- dtype Bitsandbytesで量子化する場合int4かint8を指定できる
+- template LLM用の書式を記述する {instruction}と{input}を含む
+- is_messages いわゆるChatGPT互換の書式 うまく機能してないかも
+
+以下は model.generate() に渡すパラメタ Local専用
+
+- max_new_tokens
+- temperature
+- top_p
+- top_k
+- repetition_penalty
+
+## RAG
+
+- FAISS検索機能
+- rag_dir を決めて zipをアップロードするとテキストにしてくれる
+  - langchain.document_loaders.generic.GenericLoader に対応
+- instruction から {rag('dir', 'query')} で呼び出せる
+
+## var
+
+- key-value型の変数機能
+- key を決めて value を保存する
+- instruction から {var('key')} で呼び出せる
+
+## messages
+
+- log/messages.jsonl に改行区切りの ChatGPT互換の message json を保存する
+- instruction から {msg(limit)} で呼び出せる limit は最新からの件数
+
+## settings
+
+- akachat全体の設定
+- is_test が ON なら instruction で {test('文字列')} に入れた文字列は有効
+- OpenAI API Key はここに入れる
+
+## batch
+
+- LLMの比較用
+- prompt/ に保存されているすべてのプロンプトが対象
+- 指定した model とスペース区切りの temperature で推論を実行する
+
+# WebAPI
 
 ```bash
 bash run.sh 50000
 ```
 
-### /api/chat
+- 初回起動時にvenv作ってくれる
+- 引数にはポート番号を入れる
 
-POST json
-
-- input 必須 ユーザーの発言
-- model_name 任意 hugのリポジトリ
-  - あとは config ファイルを読み込んだりPOSTで上書きしたり
-  - template, system, prompt
-- dtype int4 int8 fp16 BnBで量子化します
-
-エンドポイントは一個だけ
+http://127.0.0.1:50000/docs
 
 # 制限事項
 
-- WSL2しか対応する気ないけどWindowsでも動くかもしれない
-- transformersで簡単に動かせるサンプルコードつきのものしか対応する気は無い
-- 複数モデルのロードは必要になったら対応するかも
-- CPUには対応しません(正確な回答を長時間待つ使い方は対象外)
+- 複数モデルのロードはVRAM足らんので対応しない
 - streamingには対応しません(同じGPUで即座に音声合成やるから)
 - 非セキュアです(サーバ公開や複数人での同時使用は対象外)
 
-# 競合(上位版)
+# 似たようなツール
 
-ollama
-- https://github.com/jmorganca/ollama
-- Modelfileに設定やプロンプトをまとめて定義する仕組み
-- 日本語モデルが登録されてないので、使う前に GGUF に変換が必要
-- GGUF に変換できなければ(calm2とか)動作できなさそう
-
-llama.cppのserver
-- https://github.com/ggerganov/llama.cpp
-- OpenAI API互換
-- どうせ GGUF 作って細かく調整して動かすならこっちでいい気がする
-
+- text-generation-webui
+- llama-cpp-python
+- ollama
+  - https://github.com/jmorganca/ollama
+  - Modelfileに設定やプロンプトをまとめて定義する仕組み
+  - 日本語モデルが登録されてないので、使う前に GGUF に変換が必要
+  - GGUF に変換できなければ(calm2とか)動作できなさそう
+- llama.cppのserver
+  - https://github.com/ggerganov/llama.cpp
+  - OpenAI API互換
+  - どうせ GGUF 作って細かく調整して動かすならこっちでいい気がする

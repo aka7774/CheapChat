@@ -1,0 +1,122 @@
+{
+    "lightblue/qarasu-14B-chat-plus-unleashed": {
+		"location": "Local",
+		"model": "lightblue/qarasu-14B-chat-plus-unleashed",
+		"dtype": "int4",
+		"is_messages": false,
+		"template": "{instruction}\n\n{input}",
+		"max_new_tokens": 256,
+		"temperature": 0.1,
+		"top_p": 0.9,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
+    "elyza/ELYZA-japanese-Llama-2-13b-fast-instruct": {
+		"location": "Local",
+		"model": "elyza/ELYZA-japanese-Llama-2-13b-fast-instruct",
+		"dtype": "int4",
+		"is_messages": false,
+		"template": "{bos_token}[INST] <<SYS>>\n{instruction}\n<</SYS>>\n{input} [/INST]",
+		"max_new_tokens": 256,
+		"temperature": 1.0,
+		"top_p": 0.9,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
+    "tokyotech-llm/Swallow-13b-instruct-hf": {
+		"location": "Local",
+		"model": "tokyotech-llm/Swallow-13b-instruct-hf",
+		"dtype": "int4",
+		"is_messages": false,
+		"template":  "以下に、あるタスクを説明する指示があり、それに付随する入力が更なる文脈を提供しています。リクエストを適切に完了するための回答を記述してください。\n\n### 指示:\n{instruction}\n\n### 入力:\n{input}\n\n### 応答:",
+		"max_new_tokens": 256,
+		"temperature": 0.99,
+		"top_p": 0.95,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
+    "rinna/nekomata-14b-instruction": {
+		"location": "Local",
+		"model": "rinna/nekomata-14b-instruction",
+		"dtype": "int4",
+		"is_messages": false,
+		"template":  "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n### 指示:\n{instruction}\n\n### 入力:\n{input}\n\n### 応答:",
+		"max_new_tokens": 256,
+		"temperature": 0.5,
+		"top_p": 0.95,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
+    "cyberagent/calm2-7b-chat": {
+		"location": "Local",
+		"model": "cyberagent/calm2-7b-chat",
+		"dtype": "int4",
+		"is_messages": false,
+		"template":  "{instruction}\nUSER: {input}\nASSISTANT: ",
+		"max_new_tokens": 256,
+		"temperature": 0.8,
+		"top_p": 0.9,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
+    "llm-jp/llm-jp-13b-instruct-full-jaster-dolly-oasst-v1.0": {
+		"location": "Local",
+		"model": "llm-jp/llm-jp-13b-instruct-full-jaster-dolly-oasst-v1.0",
+		"dtype": "int4",
+		"is_messages": false,
+		"template":  "{instruction}\n{input}\n### 回答：",
+		"max_new_tokens": 256,
+		"temperature": 0.7,
+		"top_p": 0.95,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
+    "stockmark/stockmark-13b-instruct": {
+		"location": "Local",
+		"model": "stockmark/stockmark-13b-instruct",
+		"dtype": "int4",
+		"is_messages": false,
+		"template":  "{instruction}\n\n### Input:\n{input}\n\n### Output:",
+		"max_new_tokens": 256,
+		"temperature": 0.7,
+		"top_p": 0.9,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
+    "gpt-3.5-turbo-1106": {
+		"location": "OpenAI",
+		"model": "gpt-3.5-turbo-1106",
+		"dtype": "int4",
+		"is_messages": true,
+		"template":  "",
+		"max_new_tokens": 4096,
+		"temperature": 1.0,
+		"top_p": 0.9,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
+    "gpt-4-1106-preview": {
+		"location": "OpenAI",
+		"model": "gpt-4-1106-preview",
+		"dtype": "int4",
+		"is_messages": true,
+		"template":  "",
+		"max_new_tokens": 32768,
+		"temperature": 1.0,
+		"top_p": 0.9,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
+    "gpt-4-0613": {
+		"location": "OpenAI",
+		"model": "gpt-4-0613",
+		"dtype": "int4",
+		"is_messages": true,
+		"template":  "",
+		"max_new_tokens": 32768,
+		"temperature": 1.0,
+		"top_p": 0.9,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	}
+}

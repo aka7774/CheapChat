@@ -1,12 +1,28 @@
 import os
+import sys
+import time
+import signal
+import psutil
 
-import cheapchat
-
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Request, status
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+
+import func.apiloader
+from func.config import cfg
+
+def cleanup():
+    pass
+
+def sig_handler(signum, frame) -> None:
+    sys.exit(1)
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -14,12 +30,24 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    )
+)
 
-@app.post("/api/chat")
-async def api_chat(args: dict) -> Response:
-    return Response(content=cheapchat.chat(args), media_type="text/plain")
+@app.exception_handler(RequestValidationError)
+async def handler(request:Request, exc:RequestValidationError):
+    print(exc)
+    return JSONResponse(content={}, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
+@app.exception_handler(Exception)
+async def handler(request:Request, exc:RequestValidationError):
+    print(exc)
+    return JSONResponse(content={}, status_code=400)
 
-# init
-cheapchat.model_set('elyza/ELYZA-japanese-Llama-2-7b-fast-instruct', 'int4')
+signal.signal(signal.SIGTERM, sig_handler)
+try:
+    apis = func.apiloader.load_apis()
+finally:
+    signal.signal(signal.SIGTERM, signal.SIG_IGN)
+    signal.signal(signal.SIGINT, signal.SIG_IGN)
+    cleanup()
+    signal.signal(signal.SIGTERM, signal.SIG_DFL)
+    signal.signal(signal.SIGINT, signal.SIG_DFL)

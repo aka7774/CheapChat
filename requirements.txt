@@ -1,0 +1,26 @@
+# WebAPI Server
+uvicorn
+fastapi
+gradio
+# LLM
+transformers
+accelerate
+sentencepiece
+bitsandbytes
+scipy
+tiktoken
+einops
+transformers_stream_generator
+protobuf
+# RAG
+langchain
+sentence-transformers
+faiss-gpu
+# ChatGPT
+openai
+# Comment
+websocket
+websocket-client
+rel
+pytchat
+more_itertools

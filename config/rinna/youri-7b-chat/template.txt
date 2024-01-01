@@ -1,4 +1,0 @@
-{system}
-設定: {prompt}
-ユーザー: {input}
-システム: 

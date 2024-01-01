@@ -1,10 +1,15 @@
+config.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
+AILiveTuberBackend/
 # C extensions
 *.so
+
+AILiveTuberBackend/
 
 # Distribution / packaging
 .Python
@@ -25,6 +30,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+AILiveTuberBackend/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
