@@ -92,16 +92,14 @@ def infer_prompt(instruction, input = '', opt = {}):
         return func.chatgpt.infer(messages), json.dumps(messages)
 
 def infer(args: dict):
-    path = f"prompt/{args['dir']}.txt"
-    if not os.path.exists(path):
-        raise ValueError('instruction not found: ' + path)
+    instruction = load_prompt(args['dir'])
+    opt = load_options(args['dir'])
+    opt.update(args)
 
-    with open(path, 'r') as f:
-        instruction = f.read()
+    del opt['dir']
+    del opt['input']
 
-    del args['dir']
-    del args['input']
-    return infer_prompt(instruction, args['input'], args)
+    return infer_prompt(instruction, args['input'], opt)
 
 def prompt_to_messages(prompt):
     msgs = []
@@ -153,5 +151,7 @@ def load_prompts():
 
 def load_prompt(dir):
     path = f"prompt/{dir}.txt"
+    if not os.path.exists(path):
+        raise ValueError('instruction not found: ' + path)
     with open(path, 'r') as f:
         return f.read()
