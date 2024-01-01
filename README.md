@@ -23,6 +23,21 @@ git clone https://github.com/aka7774/akachat
 cd akachat
 ```
 
+# 用語の定義
+
+LLMごとに微妙に定義が違うのだけど、akachatでは次のように整理しています。
+
+- prompt instruction と options のセット
+- instruction LLMに指示するためのテキスト
+  - Llama2系では<<SYS>>タグの中身
+  - それ以外では ###指示: の中身とか
+  - ChatGPTでは "role": "system" な content
+- options model.generate() に入れるパラメタとその他の設定項目
+- template LLMが求めるinstructionとinputを含む書式
+- input ユーザーの入力文字列
+- /api/llm/* promptを実行するエンドポイント
+- /api/llmの引数dir promptのname
+
 # gradio
 
 ```bash
@@ -35,10 +50,9 @@ venv/bin/python app.py
 
 ## prompt
 
-- プロンプトtxtと設定jsonのペア
+- 指示txt(instruction)と設定json(options)のペア
 - prompt/{name}.txt prompt/{name}.json に save できる
   - save したものを WebAPI から呼び出せる
-- instruction は Llama2 や ChatGPT の system と同じ意味
 - input はユーザーの入力文字列
 
 ### Prompt Options
@@ -109,7 +123,7 @@ varタグで保存したkeyに対応するvalueを {var.key} で埋め込める�
 
 - key-value型の変数機能
 - key を決めて value を保存する
-- instruction から {var('key')} で呼び出せる
+- instruction から {var.key} で呼び出せる
 
 ## messages
 
