@@ -57,6 +57,47 @@ venv/bin/python app.py
 - top_k
 - repetition_penalty
 
+## instruction
+
+{関数名(引数)} と書けば f-string によって解釈されて実行できる。
+
+### comment(s)
+
+何も出力しない。プロンプトにコメントを入れるためのもの。
+
+### test(s)
+
+settings で is_test が ON の場合に限り s を出力する。
+RAG やログなどの仮当てをしてプロンプト編集作業をするのに使える。
+WebAPIで推論する際には常に OFF とみなされる。
+
+### msgf(v: str | list)
+
+以下のようなコロン区切りの書式のstrを ChatGPT messages 形式のlistに変換する。
+
+```
+user: こんにちは、お元気ですか?
+ai: はい、私は元気です
+```
+
+### iif(expr, t, f = '')
+
+return t if expr else f
+
+if文を関数として実行できるようにしたもの。使うとややこしくなる。
+
+### rag(dir, query)
+
+RAGタブで設置したzipを検索する。
+
+### llm(dir, **kwargs)
+
+他のpromptを呼び出す。
+
+### var
+
+varタグで保存したkeyに対応するvalueを {var.key} で埋め込める。
+
 ## RAG
 
 - FAISS検索機能
