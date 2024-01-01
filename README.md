@@ -13,7 +13,7 @@
 CUDA必須です。
 
 - WSL2 Ubuntu 22.04 動作確認済み
-- Windows 導入できれば動く
+- Windows venv.bat で導入できれば動く
 - Linux たぶん動くけど動作未確認
 
 # 導入

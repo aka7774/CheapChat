@@ -146,5 +146,5 @@ def load_prompt(dir):
     path = f"prompt/{dir}.txt"
     if not os.path.exists(path):
         raise ValueError('instruction not found: ' + path)
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='utf-8') as f:
         return f.read()
