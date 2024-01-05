@@ -160,7 +160,7 @@ def gr_tab_prompt(gr):
             with gr.Accordion('Preset', open=False):
                 gr.Examples(
                     func.models.get_examples(),
-                    [location, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
+                    [location, endpoint, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
                 )
 
         with gr.Row():
