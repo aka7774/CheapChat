@@ -14,12 +14,13 @@ def fn_load(name):
     opt = func.prompt.load_options(name)
     opt = SimpleNamespace(**opt)
 
-    return instruction, opt.location, opt.model, opt.dtype, opt.is_messages, opt.template, opt.max_new_tokens, opt.temperature, opt.top_p, opt.top_k, opt.repetition_penalty
+    return instruction, opt.location, opt.endpoint, opt.model, opt.dtype, opt.is_messages, opt.template, opt.max_new_tokens, opt.temperature, opt.top_p, opt.top_k, opt.repetition_penalty
 
-def fn_save(prompt_name, instruction, location, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty):
+def fn_save(prompt_name, instruction, location, endpoint, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty):
     func.prompt.save_prompt(prompt_name, instruction)
     opt = {
         'location': location,
+        'endpoint': endpoint,
         'model': model,
         'dtype': dtype,
         'is_messages': is_messages,
@@ -34,9 +35,10 @@ def fn_save(prompt_name, instruction, location, model, dtype, is_messages, templ
     
     return 'saved.'
 
-def fn_chat(instruction, user_input, location, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty):
+def fn_chat(instruction, user_input, location, endpoint, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty):
     opt = {
         'location': location,
+        'endpoint': endpoint,
         'model': model,
         'dtype': dtype,
         'is_messages': is_messages,
@@ -82,6 +84,13 @@ def gr_tab_prompt(gr):
                         show_label=True,
                         interactive=True,
                         )
+                    endpoint = gr.Textbox(
+                        value=opt['endpoint'],
+                        label='endpoint(openai.api_base)',
+                        show_label=True,
+                        interactive=True,
+                        show_copy_button=True,
+                    )
                     model = gr.Textbox(
                         value=opt['model'],
                         label='model',
@@ -185,17 +194,17 @@ def gr_tab_prompt(gr):
     load_button.click(
         fn=fn_load,
         inputs=[prompt_name],
-        outputs=[instruction, location, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
+        outputs=[instruction, location, endpoint, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
         )
 
     save_button.click(
         fn=fn_save,
-        inputs=[prompt_name, instruction, location, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
+        inputs=[prompt_name, instruction, location, endpoint, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
         outputs=[info],
         )
 
     chat_button.click(
         fn=fn_chat,
-        inputs=[instruction, user_input, location, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
+        inputs=[instruction, user_input, location, endpoint, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
         outputs=[said, processed],
         )

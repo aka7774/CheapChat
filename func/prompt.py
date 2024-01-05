@@ -82,7 +82,7 @@ def infer_prompt(instruction, input = '', opt = {}):
             return func.llm.chat(args), args['instruction']
     else:
         messages = prompt_to_messages(args['instruction'])
-        return func.chatgpt.infer(messages), json.dumps(messages)
+        return func.chatgpt.infer(messages, opt), json.dumps(messages)
 
 def llm(dir, input = '', **kwargs):
     instruction = load_prompt(dir)

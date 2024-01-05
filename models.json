@@ -1,6 +1,7 @@
 {
     "lightblue/qarasu-14B-chat-plus-unleashed": {
 		"location": "Local",
+		"endpoint": "",
 		"model": "lightblue/qarasu-14B-chat-plus-unleashed",
 		"dtype": "int4",
 		"is_messages": false,
@@ -13,6 +14,7 @@
 	},
     "elyza/ELYZA-japanese-Llama-2-13b-fast-instruct": {
 		"location": "Local",
+		"endpoint": "",
 		"model": "elyza/ELYZA-japanese-Llama-2-13b-fast-instruct",
 		"dtype": "int4",
 		"is_messages": false,
@@ -25,6 +27,7 @@
 	},
     "tokyotech-llm/Swallow-13b-instruct-hf": {
 		"location": "Local",
+		"endpoint": "",
 		"model": "tokyotech-llm/Swallow-13b-instruct-hf",
 		"dtype": "int4",
 		"is_messages": false,
@@ -37,6 +40,7 @@
 	},
     "rinna/nekomata-14b-instruction": {
 		"location": "Local",
+		"endpoint": "",
 		"model": "rinna/nekomata-14b-instruction",
 		"dtype": "int4",
 		"is_messages": false,
@@ -49,6 +53,7 @@
 	},
     "cyberagent/calm2-7b-chat": {
 		"location": "Local",
+		"endpoint": "",
 		"model": "cyberagent/calm2-7b-chat",
 		"dtype": "int4",
 		"is_messages": false,
@@ -61,6 +66,7 @@
 	},
     "llm-jp/llm-jp-13b-instruct-full-jaster-dolly-oasst-v1.0": {
 		"location": "Local",
+		"endpoint": "",
 		"model": "llm-jp/llm-jp-13b-instruct-full-jaster-dolly-oasst-v1.0",
 		"dtype": "int4",
 		"is_messages": false,
@@ -73,6 +79,7 @@
 	},
     "stockmark/stockmark-13b-instruct": {
 		"location": "Local",
+		"endpoint": "",
 		"model": "stockmark/stockmark-13b-instruct",
 		"dtype": "int4",
 		"is_messages": false,
@@ -85,6 +92,7 @@
 	},
     "gpt-3.5-turbo-1106": {
 		"location": "OpenAI",
+		"endpoint": "",
 		"model": "gpt-3.5-turbo-1106",
 		"dtype": "int4",
 		"is_messages": true,
@@ -97,6 +105,7 @@
 	},
     "gpt-4-1106-preview": {
 		"location": "OpenAI",
+		"endpoint": "",
 		"model": "gpt-4-1106-preview",
 		"dtype": "int4",
 		"is_messages": true,
@@ -109,6 +118,7 @@
 	},
     "gpt-4-0613": {
 		"location": "OpenAI",
+		"endpoint": "",
 		"model": "gpt-4-0613",
 		"dtype": "int4",
 		"is_messages": true,
