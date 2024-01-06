@@ -31,6 +31,8 @@ def load_header():
 
 def load_lines():
     path = "log/messages.jsonl"
+    if not os.path.exists(path):
+        return []
     with open(path, 'r') as f:
         lines = f.readlines()
 
@@ -38,6 +40,8 @@ def load_lines():
 
 def load_raw():
     path = "log/messages.jsonl"
+    if not os.path.exists(path):
+        return ''
     with open(path, 'r') as f:
         body = f.read()
 

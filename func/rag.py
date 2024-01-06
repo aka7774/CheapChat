@@ -5,8 +5,8 @@ import requests
 
 from langchain.document_loaders.generic import GenericLoader
 from langchain.document_loaders.blob_loaders import FileSystemBlobLoader
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
 from langchain.vectorstores.utils import DistanceStrategy
 from langchain.text_splitter import CharacterTextSplitter
 

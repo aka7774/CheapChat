@@ -1,7 +1,7 @@
 import os
 
 def save_var(key, value):
-    path = f"var/{key}.txt"
+    path = f"vars/{key}.txt"
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w', encoding='utf-8') as f:
         f.write(value)
@@ -10,7 +10,7 @@ def save_var(key, value):
 
 def load_vars():
     vars = {}
-    for key in os.listdir('var'):
+    for key in os.listdir('vars'):
         if not key.endswith('.txt'):
             continue
         stem, ext = os.path.splitext(key)
@@ -19,6 +19,6 @@ def load_vars():
     return vars
 
 def load_var(key):
-    path = f"var/{key}.txt"
+    path = f"vars/{key}.txt"
     with open(path, 'r') as f:
         return f.read()

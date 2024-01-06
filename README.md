@@ -5,16 +5,17 @@
 # 要件
 
 - 新しいローカルLLM(transformersで動くやつ)をすぐ試したい
-- AI VTuberに喋らせるためのWebAPIが欲しい
+- デジタルヒューマンに喋らせるためのWebAPIが欲しい
 - playgroundの中から関数を呼び出したい
 
 ## 対応環境
 
 CUDA必須です。
+一通り動作確認していますが、今後の動作確認を保証するものではありません。
 
-- WSL2 Ubuntu 22.04 動作確認済み
-- Windows venv.bat で導入できれば動く
-- Linux たぶん動くけど動作未確認
+- WSL2 Ubuntu 22.04
+- Windows 11
+- Linux Ubuntu 22.04
 
 # 導入
 
@@ -22,6 +23,16 @@ CUDA必須です。
 git clone https://github.com/aka7774/akachat
 cd akachat
 ```
+
+## Linux
+
+```bash
+bash venv.sh
+```
+
+## Windows
+
+setup_windows.bat を実行
 
 # 用語の定義
 
@@ -41,11 +52,13 @@ LLMごとに微妙に定義が違うのだけど、akachatでは次のように�
 # gradio
 
 ```bash
-bash venv.sh
+venv/bin/python app.py
 ```
 
+あるいは
+
 ```bash
-venv/bin/python app.py
+GRADIO_SERVER_NAME="0.0.0.0" GRADIO_SERVER_PORT=50001 venv/bin/python app.py
 ```
 
 ## prompt
@@ -143,6 +156,12 @@ varタグで保存したkeyに対応するvalueを {var.key} で埋め込める�
 - 指定した model とスペース区切りの temperature で推論を実行する
 
 # WebAPI
+
+```bash
+venv/bin/python -m uvicorn main:app
+```
+
+あるいは
 
 ```bash
 bash run.sh 50000
