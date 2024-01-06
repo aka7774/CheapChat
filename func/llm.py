@@ -121,7 +121,7 @@ def chat(args: dict):
         tprompt = config['template'].format(bos_token=tokenizer.bos_token, instruction=args['instruction'], input=args['input'])
 
     kwargs = config.copy()
-    for k in ['model_name', 'template', 'instruction', 'input', 'location', 'model', 'dtype', 'is_messages']:
+    for k in ['model_name', 'template', 'instruction', 'input', 'location', 'endpoint', 'model', 'dtype', 'is_messages']:
         if k in kwargs:
             del kwargs[k]
 
