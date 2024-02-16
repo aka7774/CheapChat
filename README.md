@@ -49,13 +49,25 @@ LLMごとに微妙に定義が違うのだけど、akachatでは次のように�
 - /api/llm/* promptを実行するエンドポイント
 - /api/llmの引数dir promptのname
 
-# gradio
+# Run
+
+- 初回起動時にvenv作ってくれる
+- 引数にはポート番号を入れる
 
 ```bash
-venv/bin/python app.py
+bash run.sh 50000
 ```
 
+- http://127.0.0.1:50000/docs
+- http://127.0.0.1:50000/gradio
+
 あるいは
+
+```bash
+venv/bin/python -m uvicorn main:app
+```
+
+graioだけ起動したい場合
 
 ```bash
 GRADIO_SERVER_NAME="0.0.0.0" GRADIO_SERVER_PORT=50001 venv/bin/python app.py
@@ -154,23 +166,6 @@ varタグで保存したkeyに対応するvalueを {var.key} で埋め込める�
 - LLMの比較用
 - prompt/ に保存されているすべてのプロンプトが対象
 - 指定した model とスペース区切りの temperature で推論を実行する
-
-# WebAPI
-
-```bash
-venv/bin/python -m uvicorn main:app
-```
-
-あるいは
-
-```bash
-bash run.sh 50000
-```
-
-- 初回起動時にvenv作ってくれる
-- 引数にはポート番号を入れる
-
-http://127.0.0.1:50000/docs
 
 # 制限事項
 
