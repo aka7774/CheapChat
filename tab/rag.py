@@ -14,7 +14,7 @@ def fn_search(dir, query):
 
     return result
 
-def gr_tab_rag(gr):
+def gr_tab(gr):
     with gr.Tab('RAG'):
         info = gr.Markdown()
         with gr.Row():

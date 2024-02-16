@@ -56,7 +56,7 @@ def fn_chat(instruction, user_input, location, endpoint, model, dtype, is_messag
 def fn_reload():
     return list(func.prompt.load_prompts().keys())
 
-def gr_tab_prompt(gr):
+def gr_tab(gr):
     with gr.Tab('prompt'):
         info = gr.Markdown()
         with gr.Row():

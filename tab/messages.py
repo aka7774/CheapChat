@@ -3,7 +3,7 @@ from tab.refresh import create_refresh_button
 
 from func.config import cfg
 
-def gr_tab_messages(gr):
+def gr_tab(gr):
     with gr.Tab('messages'):
         info = gr.Markdown()
         with gr.Row():

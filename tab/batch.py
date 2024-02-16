@@ -4,7 +4,7 @@ import func.prompt
 from func.config import cfg
 from func.models import models
 
-def gr_tab_batch(gr):
+def gr_tab(gr):
     with gr.Tab('batch'):
         info = gr.Markdown()
         b_options = gr.Textbox(

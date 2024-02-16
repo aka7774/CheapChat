@@ -11,7 +11,7 @@ def fn_apply_settings(is_test, openai_key):
 
     return 'saved.'
 
-def gr_tab_settings(gr):
+def gr_tab(gr):
     with gr.Tab('Settings'):
         info = gr.Markdown()
         apply_settings = gr.Button(value='Apply settings')

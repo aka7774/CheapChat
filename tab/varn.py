@@ -37,7 +37,7 @@ def fn_load(jd):
         
     return inputs
 
-def gr_tab_varn(gr):
+def gr_tab(gr):
     with gr.Tab('VarN'):
         with gr.Row():
             with gr.Column(scale=1):

@@ -2,13 +2,13 @@ import os
 import json
 import gradio as gr
 
-from tab.prompt import gr_tab_prompt
-from tab.rag import gr_tab_rag
-from tab.var import gr_tab_var
-from tab.messages import gr_tab_messages
-from tab.settings import gr_tab_settings
-from tab.batch import gr_tab_batch
-from tab.varn import gr_tab_varn
+import tab.prompt
+import tab.rag
+import tab.var
+import tab.messages
+import tab.settings
+import tab.batch
+import tab.varn
 from tab.refresh import create_refresh_button
 
 from func.config import cfg
@@ -17,18 +17,13 @@ from func.config import cfg
 with gr.Blocks() as demo:
     title = gr.Markdown('# akachat')
     info = gr.Markdown()
-    gr_tab_prompt(gr)
-    gr_tab_rag(gr)
-    gr_tab_var(gr)
-    gr_tab_messages(gr)
-    gr_tab_settings(gr)
-    gr_tab_batch(gr)
-    gr_tab_varn(gr)
+    tab.prompt.gr_tab(gr)
+    tab.rag.gr_tab(gr)
+    tab.var.gr_tab(gr)
+    tab.messages.gr_tab(gr)
+    tab.settings.gr_tab(gr)
+    tab.batch.gr_tab(gr)
+    tab.varn.gr_tab(gr)
 
-# init
-#func.chat.model_set('elyza/ELYZA-japanese-Llama-2-7b-fast-instruct', 'int4')
-
-#from main import app
-#app = gr.mount_gradio_app(app, demo, path="/gradio")
-
-demo.launch()
+if __name__ == '__main__':
+    demo.launch()

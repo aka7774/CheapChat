@@ -92,7 +92,11 @@ def llm(dir, input = '', **kwargs):
     return infer_prompt(instruction, input, opt)
 
 def infer(args: dict):
-    return llm(args['dir'], args['input'], args)
+    dir = args['dir']
+    input = args['input']
+    del args['dir']
+    del args['input']
+    return llm(dir, input, **args)
 
 def prompt_to_messages(prompt):
     msgs = []

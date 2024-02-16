@@ -4,6 +4,8 @@ import time
 import signal
 import psutil
 
+import gradio as gr
+
 from fastapi import FastAPI, Request, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,6 +16,8 @@ from fastapi.responses import JSONResponse
 import func.apiloader
 from func.config import cfg
 
+from app import demo
+
 def cleanup():
     pass
 
@@ -23,6 +27,7 @@ def sig_handler(signum, frame) -> None:
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+gr.mount_gradio_app(app, demo, path="/gradio")
 
 app.add_middleware(
     CORSMiddleware,

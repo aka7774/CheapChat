@@ -23,3 +23,9 @@ websocket-client
 rel
 pytchat
 more_itertools
+# sd
+diffusers
+opencv-python
+pytorch_lightning
+torch
+torchvision
