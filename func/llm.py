@@ -39,7 +39,6 @@ def model_set(model_name, dtype = 'int4'):
             quantization_config=BitsAndBytesConfig(
                 load_in_4bit=True,
                 bnb_4bit_compute_dtype=torch.bfloat16,
-                attn_implementation="flash_attention_2",
             ),
         )
     elif dtype == 'int8':
@@ -50,7 +49,6 @@ def model_set(model_name, dtype = 'int4'):
             quantization_config=BitsAndBytesConfig(
                 torch_dtype=torch.bfloat16,
                 load_in_8bit=True,
-                attn_implementation="flash_attention_2",
             ),
         )
     elif dtype == 'fp16':
@@ -59,7 +57,6 @@ def model_set(model_name, dtype = 'int4'):
             device_map="auto",
             trust_remote_code=True,
             torch_dtype=torch.float16,
-            attn_implementation="flash_attention_2",
         )
     elif dtype == 'bf16':
         model = AutoModelForCausalLM.from_pretrained(
@@ -67,7 +64,6 @@ def model_set(model_name, dtype = 'int4'):
             device_map="auto",
             trust_remote_code=True,
             torch_dtype=torch.bfloat16,
-            attn_implementation="flash_attention_2",
         )
     else:
         model = AutoModelForCausalLM.from_pretrained(
@@ -105,10 +101,6 @@ def chat(args: dict):
         else:
             model_set(args['model_name'])
 
-    print(args['input'])
-
-    begin = datetime.datetime.now()
-
     config.update(args)
 
     if config['is_messages']:
@@ -124,9 +116,6 @@ def chat(args: dict):
     for k in ['model_name', 'template', 'instruction', 'input', 'location', 'endpoint', 'model', 'dtype', 'is_messages']:
         if k in kwargs:
             del kwargs[k]
-
-    print(tprompt)
-    print(kwargs)
 
     with torch.no_grad():
         token_ids = tokenizer.encode(tprompt, add_special_tokens=False, return_tensors="pt")
@@ -148,12 +137,6 @@ def chat(args: dict):
     out = output_ids.tolist()[0][token_ids.size(1) :]
     output = tokenizer.decode(out, skip_special_tokens=True)
 
-    print(config)
-
-    print(output)
-
     content = trim_output(output)
 
-    print(datetime.datetime.now() - begin)
-    
-    return content
+    return content, tprompt

@@ -2,6 +2,7 @@ import os
 import requests
 import json
 import re
+import datetime
 
 from types import SimpleNamespace
 
@@ -74,15 +75,54 @@ def infer_prompt(instruction, input = '', opt = {}):
     args['instruction'] = eval("f'''" + instruction + "'''")
     args['input'] = input
 
+    messages = prompt_to_messages(args['instruction'])
+
+    begin = datetime.datetime.now()
+
     if opt['location'] == 'Local':
         if 'is_messages' in opt and opt['is_messages']:
-            messages = prompt_to_messages(args['instruction'])
-            return func.llm.chat(args), json.dumps(messages)
+            speech, detail = func.llm.chat(args)
         else:
-            return func.llm.chat(args), args['instruction']
+            speech, detail = func.llm.chat(args)
     else:
-        messages = prompt_to_messages(args['instruction'])
-        return func.chatgpt.infer(messages, opt), json.dumps(messages)
+        speech, detail = func.chatgpt.infer(messages, opt)
+
+    infer_log(messages, args, str(datetime.datetime.now() - begin), speech, detail)
+
+    return speech, json.dumps(messages)
+
+def infer_log(messages, args, time, speech, detail):
+    today = datetime.date.today()
+
+    infer_log_txt(args['instruction'], speech)
+    del args['instruction']
+
+    os.makedirs("log/speech/", exist_ok=True)
+    path = f"log/speech/{today.strftime('%Y-%m-%d')}.log"
+    with open(path, 'a') as f:
+        f.write("========\n")
+        json.dump(messages, f)
+        f.write("\n")
+        json.dump(args, f)
+        f.write("\n")
+        f.write(time)
+        f.write("\n")
+        if type(detail) is str:
+            f.write(detail)
+        elif type(detail) is dict:
+            json.dump(detail, f)
+        else:
+            pass
+        f.write("\n")
+
+def infer_log_txt(prompt, speech):
+    today = datetime.date.today()
+
+    os.makedirs("log/speech/", exist_ok=True)
+    path = f"log/speech/{today.strftime('%Y-%m-%d')}.txt"
+    with open(path, 'a', encoding='utf-8') as f:
+        f.write("========\n")
+        f.write(f"{prompt}\n--------\n{speech}\n")
 
 def llm(dir, input = '', **kwargs):
     instruction = load_prompt(dir)
@@ -93,10 +133,8 @@ def llm(dir, input = '', **kwargs):
 
 def infer(args: dict):
     dir = args['dir']
-    input = args['input']
     del args['dir']
-    del args['input']
-    return llm(dir, input, **args)
+    return llm(dir, **args)
 
 def prompt_to_messages(prompt):
     msgs = []
