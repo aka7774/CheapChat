@@ -5,6 +5,7 @@ import datetime
 import json
 import csv
 import gc
+import requests
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from transformers import TextStreamer, TextIteratorStreamer
 from transformers import GenerationConfig, AutoConfig, GPTQConfig, AwqConfig
@@ -140,3 +141,34 @@ def chat(args: dict):
     content = trim_output(output)
 
     return content, tprompt
+
+def request(args: dict):
+    url = args['endpoint']
+    config.update(args)
+    tprompt = config['template'].format(instruction=args['instruction'], input=args['input'])
+    data = {}
+    data['prompt'] = tprompt
+    data['stop'] = ["###"]
+
+    kwargs = config.copy()
+    for k in ['model_name', 'template', 'instruction', 'input', 'location', 'endpoint', 'model', 'dtype', 'is_messages']:
+        if k in kwargs:
+            del kwargs[k]
+    kwargs.update(data)
+    
+    if 'max_new_tokens' in kwargs:
+        kwargs['max_tokens'] = kwargs['max_new_tokens']
+        del kwargs['max_new_tokens']
+
+    if 'repetition_penalty' in kwargs:
+        kwargs['repeat_penalty'] = kwargs['repetition_penalty']
+        del kwargs['repetition_penalty']
+
+    print(kwargs)
+    res = requests.post(url, json.dumps(kwargs), headers={'Content-Type': 'application/json'})
+    jo = res.json()
+    body = jo['choices'][0]['text']
+
+    content = trim_output(body)
+
+    return content, jo

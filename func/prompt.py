@@ -80,10 +80,9 @@ def infer_prompt(instruction, input = '', opt = {}):
     begin = datetime.datetime.now()
 
     if opt['location'] == 'Local':
-        if 'is_messages' in opt and opt['is_messages']:
-            speech, detail = func.llm.chat(args)
-        else:
-            speech, detail = func.llm.chat(args)
+        speech, detail = func.llm.chat(args)
+    elif opt['location'] == 'Llama.cpp':
+        speech, detail = func.llm.request(args)
     else:
         speech, detail = func.chatgpt.infer(messages, opt)
 
