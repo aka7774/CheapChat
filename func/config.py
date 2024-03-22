@@ -9,6 +9,7 @@ def load_settings():
     cfg_default = {
         'is_test': True,
         'openai_key': '',
+        'anthropic_key': '',
     }
     if os.path.exists('config.json'):
         with open('config.json', 'r', encoding='utf-8') as f:

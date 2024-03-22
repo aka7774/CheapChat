@@ -17,6 +17,8 @@ langchain
 sentence-transformers
 # ChatGPT
 openai
+# Claude3
+anthropic
 # Comment
 websocket
 websocket-client

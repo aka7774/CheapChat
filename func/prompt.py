@@ -8,6 +8,7 @@ from types import SimpleNamespace
 
 import func.rag
 import func.chatgpt
+import func.claude3
 import func.llm
 
 import func.var
@@ -83,8 +84,10 @@ def infer_prompt(instruction, input = '', opt = {}):
         speech, detail = func.llm.chat(args)
     elif opt['location'] == 'Llama.cpp':
         speech, detail = func.llm.request(args)
-    else:
+    elif opt['location'] == 'OpenAI':
         speech, detail = func.chatgpt.infer(messages, opt)
+    elif opt['location'] == 'Anthropic':
+        speech, detail = func.claude3.infer(messages, opt)
 
     infer_log(messages, args, str(datetime.datetime.now() - begin), speech, detail)
 
