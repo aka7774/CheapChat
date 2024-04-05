@@ -2,6 +2,7 @@ import os
 import json
 import gradio as gr
 
+import tab.chat
 import tab.prompt
 import tab.rag
 import tab.var
@@ -17,6 +18,7 @@ from func.config import cfg
 with gr.Blocks() as demo:
     title = gr.Markdown('# akachat')
     info = gr.Markdown()
+    tab.chat.gr_tab(gr)
     tab.prompt.gr_tab(gr)
     tab.rag.gr_tab(gr)
     tab.var.gr_tab(gr)

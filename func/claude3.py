@@ -8,13 +8,16 @@ def infer(messages, opt):
         api_key=cfg['anthropic_key'],
     )
 
+    system = ''
     for i, v in enumerate(messages):
         if v['role'] == 'system':
-            messages[i]['role'] = 'user'
+            system += messages[i]['content']
+            del messages[i]
 
     message = client.messages.create(
         max_tokens=opt['max_new_tokens'],
+        system=system,
         messages=messages,
         model=opt['model'],
     )
-    return message.content, message
+    return message.content[0].text, message

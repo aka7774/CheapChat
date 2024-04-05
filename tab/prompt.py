@@ -50,8 +50,15 @@ def fn_chat(instruction, user_input, location, endpoint, model, dtype, is_messag
         'repetition_penalty': float(repetition_penalty),
     }
 
-    r, p = func.prompt.infer_prompt(instruction, user_input, opt)
-    return [r, p]
+    r, d, t = func.prompt.infer_prompt(instruction, user_input, opt)
+
+    jd = ''
+    try:
+        jd = json.dumps(vars(d))
+    except:
+        pass
+
+    return [r, jd, t]
 
 def fn_reload():
     return list(func.prompt.load_prompts().keys())
@@ -182,11 +189,11 @@ def gr_tab(gr):
                 chat_button = gr.Button(value='chat')
 
             with gr.Column(scale=1):
-                said = gr.Textbox(label='said', show_label=True, show_copy_button=True)
-                processed = gr.Textbox(
+                said = gr.Textbox(label='said', show_copy_button=True)
+                time = gr.Textbox(label='time', show_copy_button=True)
+                detail = gr.Textbox(
                     lines=15,
-                    label='processed',
-                    show_label=True,
+                    label='detail',
                     interactive=False,
                     show_copy_button=True,
                     )
@@ -206,5 +213,5 @@ def gr_tab(gr):
     chat_button.click(
         fn=fn_chat,
         inputs=[instruction, user_input, location, endpoint, model, dtype, is_messages, template, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
-        outputs=[said, processed],
+        outputs=[said, detail, time],
         )

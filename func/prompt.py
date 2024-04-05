@@ -76,7 +76,12 @@ def infer_prompt(instruction, input = '', opt = {}):
     args['instruction'] = eval("f'''" + instruction + "'''")
     args['input'] = input
 
-    messages = prompt_to_messages(args['instruction'])
+    if input:
+        messages = prompt_to_messages(args['instruction'])
+        messages.append({'role': 'user', 'content': input})
+    else:
+        # Claude3 must have non-empty content
+        messages = [{'role': 'user', 'content': args['instruction']}]
 
     begin = datetime.datetime.now()
 
@@ -89,9 +94,10 @@ def infer_prompt(instruction, input = '', opt = {}):
     elif opt['location'] == 'Anthropic':
         speech, detail = func.claude3.infer(messages, opt)
 
-    infer_log(messages, args, str(datetime.datetime.now() - begin), speech, detail)
+    time = datetime.datetime.now() - begin
+    infer_log(messages, args, str(time), speech, detail)
 
-    return speech, json.dumps(messages)
+    return speech, detail, time # json.dumps(messages)
 
 def infer_log(messages, args, time, speech, detail):
     today = datetime.date.today()
