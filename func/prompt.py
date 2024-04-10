@@ -9,6 +9,7 @@ from types import SimpleNamespace
 import func.rag
 import func.chatgpt
 import func.claude3
+import func.gemini
 import func.llm
 
 import func.var
@@ -93,6 +94,8 @@ def infer_prompt(instruction, input = '', opt = {}):
         speech, detail = func.chatgpt.infer(messages, opt)
     elif opt['location'] == 'Anthropic':
         speech, detail = func.claude3.infer(messages, opt)
+    elif opt['location'] == 'Google':
+        speech, detail = func.gemini.infer(messages, opt)
 
     time = datetime.datetime.now() - begin
     infer_log(messages, args, str(time), speech, detail)

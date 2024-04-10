@@ -116,6 +116,19 @@
 		"top_k": 40,
 		"repetition_penalty": 1.1
 	},
+    "gpt-4-turbo-2024-04-09": {
+		"location": "OpenAI",
+		"endpoint": "",
+		"model": "gpt-4-turbo-2024-04-09",
+		"dtype": "int4",
+		"is_messages": true,
+		"template":  "",
+		"max_new_tokens": 128000,
+		"temperature": 1.0,
+		"top_p": 0.9,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
     "gpt-4-0613": {
 		"location": "OpenAI",
 		"endpoint": "",
@@ -176,6 +189,19 @@
 		"is_messages": true,
 		"template":  "",
 		"max_new_tokens": 4096,
+		"temperature": 1.0,
+		"top_p": 0.9,
+		"top_k": 40,
+		"repetition_penalty": 1.1
+	},
+    "gemini-1.5-pro-latest": {
+		"location": "Google",
+		"endpoint": "",
+		"model": "gemini-1.5-pro-latest",
+		"dtype": "int4",
+		"is_messages": true,
+		"template":  "",
+		"max_new_tokens": 1000000,
 		"temperature": 1.0,
 		"top_p": 0.9,
 		"top_k": 40,

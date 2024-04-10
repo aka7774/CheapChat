@@ -85,7 +85,7 @@ def gr_tab(gr):
             with gr.Row():
                 with gr.Column(scale=1):
                     location = gr.Radio(
-                        choices=['Local', 'OpenAI', 'Llama.cpp', 'Anthropic'],
+                        choices=['Local', 'OpenAI', 'Llama.cpp', 'Anthropic', 'Google'],
                         value=opt['location'],
                         label='location',
                         show_label=True,
