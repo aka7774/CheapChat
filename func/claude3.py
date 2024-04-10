@@ -15,7 +15,7 @@ def infer(messages, opt):
             del messages[i]
 
     message = client.messages.create(
-        max_tokens=opt['max_new_tokens'],
+        max_tokens=opt['output_tokens'],
         system=system,
         messages=messages,
         model=opt['model'],

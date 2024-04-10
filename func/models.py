@@ -9,7 +9,10 @@ def load():
 def get_examples():
     examples = []
     for model in models.keys():
-        examples.append(list(models[model].values()))
+        r = []
+        for k, v in models[model].items():
+            r.append(v)
+        examples.append(r)
 
     return examples
 

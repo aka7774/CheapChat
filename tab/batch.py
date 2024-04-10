@@ -32,15 +32,15 @@ def gr_tab(gr):
             show_copy_button=True,
         )
         b_temps = gr.Textbox(
-            value='0.5',
-            lines=1,
+            value='0.9',
+            lines=5,
             label='temps',
             show_label=True,
             interactive=True,
             show_copy_button=True,
         )
-        b_input = gr.Textbox(
-            lines=1,
+        b_inputs = gr.Textbox(
+            lines=5,
             label='input',
             show_label=True,
             interactive=True,
@@ -50,6 +50,6 @@ def gr_tab(gr):
 
     run_button.click(
         fn=func.batch.run,
-        inputs=[b_options, b_prompts, b_models, b_temps, b_input],
+        inputs=[b_options, b_prompts, b_models, b_temps, b_inputs],
         outputs=[info],
         )

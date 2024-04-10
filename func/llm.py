@@ -139,6 +139,9 @@ def chat(args: dict):
     output = tokenizer.decode(out, skip_special_tokens=True)
 
     content = trim_output(output)
+    
+    del output_ids
+    del output
 
     return content, tprompt
 
@@ -156,9 +159,9 @@ def request(args: dict):
             del kwargs[k]
     kwargs.update(data)
     
-    if 'max_new_tokens' in kwargs:
-        kwargs['max_tokens'] = kwargs['max_new_tokens']
-        del kwargs['max_new_tokens']
+    if 'output_tokens' in kwargs:
+        kwargs['max_tokens'] = kwargs['output_tokens']
+        del kwargs['output_tokens']
 
     if 'repetition_penalty' in kwargs:
         kwargs['repeat_penalty'] = kwargs['repetition_penalty']
