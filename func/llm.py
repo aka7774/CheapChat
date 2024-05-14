@@ -113,8 +113,12 @@ def chat(args: dict):
     else:
         tprompt = config['template'].format(bos_token=tokenizer.bos_token, instruction=args['instruction'], input=args['input'])
 
+    if config['output_tokens']:
+        config['max_new_tokens'] = config['output_tokens']
+        del config['output_tokens']
+
     kwargs = config.copy()
-    for k in ['model_name', 'template', 'instruction', 'input', 'location', 'endpoint', 'model', 'dtype', 'is_messages']:
+    for k in ['model_name', 'template', 'instruction', 'input', 'location', 'endpoint', 'model', 'dtype', 'is_messages', 'input_tokens']:
         if k in kwargs:
             del kwargs[k]
 
