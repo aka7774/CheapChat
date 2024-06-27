@@ -3,9 +3,11 @@ import json
 
 from func.config import cfg, save_settings
 
-def fn_apply_settings(is_test, openai_key):
+def fn_apply_settings(is_test, openai_key, anthropic_key, googleai_key):
     cfg['is_test'] = is_test
     cfg['openai_key'] = openai_key
+    cfg['anthropic_key'] = anthropic_key
+    cfg['googleai_key'] = googleai_key
 
     save_settings(cfg)
 
@@ -25,13 +27,27 @@ def gr_tab(gr):
                     )
                 openai_key = gr.Textbox(
                     value=cfg['openai_key'],
-                    label='OpenAI Key',
+                    label='openai_key',
+                    show_label=True,
+                    interactive=True,
+                    show_copy_button=True,
+                    )
+                anthropic_key = gr.Textbox(
+                    value=cfg['anthropic_key'],
+                    label='anthropic_key',
+                    show_label=True,
+                    interactive=True,
+                    show_copy_button=True,
+                    )
+                googleai_key = gr.Textbox(
+                    value=cfg['googleai_key'],
+                    label='googleai_key',
                     show_label=True,
                     interactive=True,
                     show_copy_button=True,
                     )
 
-    setting_inputs = [is_test, openai_key]
+    setting_inputs = [is_test, openai_key, anthropic_key, googleai_key]
     
     apply_settings.click(
         fn=fn_apply_settings,

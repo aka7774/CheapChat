@@ -2,20 +2,28 @@
 
 あかちゃんチャット
 
-# 要件
+# あかちゃんファミリー
 
-- 新しいローカルLLM(transformersで動くやつ)をすぐ試したい
-- デジタルヒューマンに喋らせるためのWebAPIが欲しい
-- playgroundの中から関数を呼び出したい
+https://huggingface.co/aka7774
+
+- trllm ローカルLLM(transformersで動くやつ)をすぐ試せるツール
+- faiss ベクトル検索に使える基礎的なRAGツール
+- loapi AI VTuberとかの姿や声を出す支援をするAPIサーバ
+- OneGAI Linuxで複数のサーバのインストールや起動終了を管理するwebui
+
+akachatは、これらのサーバの起動を前提として動作するAPIサーバです。
+
+text-generation-webui や Dify などと同ジャンルのアプリです。
+
+OpenAI / Anthropic / GoogleAI にも対応してるけど、ローカルAIとの親和性が高いです。
 
 ## 対応環境
 
-CUDA必須です。
-一通り動作確認していますが、今後の動作確認を保証するものではありません。
+WSL2 / Windows 11 / Linux Ubuntu 22.04
 
-- WSL2 Ubuntu 22.04
-- Windows 11
-- Linux Ubuntu 22.04
+- CUDA必須です。
+- インターネットに公開する場合は nginx で https化とBASIC認証推奨です。
+  - WSL2かLinuxであればOneGAIで簡単に設定できます。
 
 # 導入
 
@@ -32,22 +40,17 @@ bash venv.sh
 
 ## Windows
 
-setup_windows.bat を実行
+install.bat をダウンロードして実行
 
 # 用語の定義
 
 LLMごとに微妙に定義が違うのだけど、akachatでは次のように整理しています。
 
-- prompt instruction と options のセット
-- instruction LLMに指示するためのテキスト
-  - Llama2系では<<SYS>>タグの中身
-  - それ以外では ###指示: の中身とか
-  - ChatGPTでは "role": "system" な content
-- options model.generate() に入れるパラメタとその他の設定項目
-- template LLMが求めるinstructionとinputを含む書式
-- input ユーザーの入力文字列
-- /api/llm/* promptを実行するエンドポイント
-- /api/llmの引数dir promptのname
+- instruction LLMに指示するためのテキスト SYS とか system と呼ばれる
+- options trllm に渡して model.generate() に入れるパラメタなど
+- inst_template Llama2系で言う <s> [INST] から始まる文字列
+- chat_template tokenizer.chat_template
+- prompt 上記すべてのセット
 
 # Run
 
@@ -64,16 +67,60 @@ bash run.sh 50000
 あるいは
 
 ```bash
-venv/bin/python -m uvicorn main:app
+venv/bin/python -m uvicorn main:app --host 0.0.0.0 --port 50000
 ```
 
-graioだけ起動したい場合
+gradioだけ起動したい場合
 
 ```bash
-GRADIO_SERVER_NAME="0.0.0.0" GRADIO_SERVER_PORT=50001 venv/bin/python app.py
+GRADIO_SERVER_NAME="0.0.0.0" GRADIO_SERVER_PORT=50000 venv/bin/python app.py
 ```
 
-## prompt
+# api
+
+## /api/prompt/infer
+
+promptを実行するエンドポイント
+
+- name サーバに保存されているpromptの名前
+- input ユーザーの入力文字列
+- messages チャット履歴(OpenAI形式)
+
+## /api/prompt/stream
+
+inferの戻り値がstreamになったもの
+
+# クラウドLLM互換
+
+互換性は不完全です。
+
+## ローカル(llama.cpp, vllm, ollamaなど)
+
+- すべて OpenAI API互換サーバとして OpenAI を指定して動作させてください
+- 各サーバごとに互換性が不足している可能性があります(が、akachatではサポートしません)
+
+## OpenAI
+
+- repetition_penalty の入力値を frequency_penalty に適用する
+- instruction があれば messages の先頭に insert する
+- input があれば messages の末尾に append する
+
+## Anthropic
+
+- penaltyは設定できないっぽい
+- anthropic では system は別途指定する
+- 誤って messages で指定されていたら system に集約してあげる
+
+## GoogleAI
+
+- どんなオプションが指定できるかわからない
+- google では system と user を同時に使えない
+- instruction が指定されていたら user に変換してあげる
+- content じゃなくて parts[] なので変換する
+
+## 
+
+# prompt
 
 - 指示txt(instruction)と設定json(options)のペア
 - prompt/{name}.txt prompt/{name}.json に save できる
@@ -137,9 +184,8 @@ RAGタブで設置したzipを検索する。
 
 varタグで保存したkeyに対応するvalueを {var.key} で埋め込める。
 
-## RAG
+## faiss
 
-- FAISS検索機能
 - rag_dir を決めて zipをアップロードするとテキストにしてくれる
   - langchain.document_loaders.generic.GenericLoader に対応
 - instruction から {rag('dir', 'query')} で呼び出せる
@@ -166,12 +212,6 @@ varタグで保存したkeyに対応するvalueを {var.key} で埋め込める�
 - LLMの比較用
 - prompt/ に保存されているすべてのプロンプトが対象
 - 指定した model とスペース区切りの temperature で推論を実行する
-
-# 制限事項
-
-- 複数モデルのロードはVRAM足らんので対応しない
-- streamingには対応しません(同じGPUで即座に音声合成やるから)
-- 非セキュアです(サーバ公開や複数人での同時使用は対象外)
 
 # 似たようなツール
 

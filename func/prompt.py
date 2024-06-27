@@ -6,10 +6,6 @@ import datetime
 
 from types import SimpleNamespace
 
-import func.rag
-import func.chatgpt
-import func.claude3
-import func.gemini
 import func.llm
 
 import func.var
@@ -31,9 +27,6 @@ def msgf(v: str | list):
         a = v
     elif type(v) is str:
         a = v.splitlines()
-
-    if cfg['location'] == 'Local':
-        return "\n".join(a)
         
     if a:
         for line in a:
@@ -52,20 +45,6 @@ def msgf(v: str | list):
 
 def iif(expr, t, f = ''):
     return t if expr else f
-
-def rag(dir, query):
-    args = {
-        'dir': dir,
-        'query': query,
-        'k': 1,
-    }
-    try:
-        vector_store = func.rag.vector_load(args)
-        result, detail = func.rag.search(vector_store, args)
-        return result
-    except Exception as e:
-        print(e)
-        return ''
 
 def infer_prompt(instruction, input = '', opt = {}):
     var = func.var.load_vars()
@@ -86,23 +65,14 @@ def infer_prompt(instruction, input = '', opt = {}):
 
     begin = datetime.datetime.now()
 
-    if opt['location'] == 'Local':
-        speech, detail = func.llm.chat(args)
-    elif opt['location'] == 'Llama.cpp':
-        speech, detail = func.llm.request(args)
-    elif opt['location'] == 'OpenAI':
-        speech, detail = func.chatgpt.infer(messages, opt)
-    elif opt['location'] == 'Anthropic':
-        speech, detail = func.claude3.infer(messages, opt)
-    elif opt['location'] == 'Google':
-        speech, detail = func.gemini.infer(messages, opt)
+    speech, detail = func.llm.infer(instruction, input, messages, opt)
 
     time = datetime.datetime.now() - begin
     infer_log(messages, args, str(time), speech, detail)
 
-    return speech, detail, time # json.dumps(messages)
+    return speech, {}, time # json.dumps(messages)
 
-def infer_log(messages, args, time, speech, detail):
+def infer_log(messages, args, time, speech, detail = None):
     today = datetime.date.today()
 
     infer_log_txt(args['instruction'], speech)

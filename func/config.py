@@ -6,20 +6,22 @@ def save_settings(cfg):
         json.dump(cfg, f, indent=4)
 
 def load_settings():
-    cfg_default = {
-        'is_test': True,
-        'openai_key': '',
-        'anthropic_key': '',
-    }
+    with open('default_config.json', 'r', encoding='utf-8') as f:
+        default_config = json.load(f)
+
     if os.path.exists('config.json'):
         with open('config.json', 'r', encoding='utf-8') as f:
             cfg = json.load(f)
     else:
         cfg = {}
 
-    for k, v in cfg_default.items():
+    for k, v in default_config.items():
         cfg.setdefault(k, v)
 
     return cfg
-    
+
 cfg = load_settings()
+
+os.makedirs('log/speech', exist_ok=True)
+os.makedirs('prompt', exist_ok=True)
+os.makedirs('vars', exist_ok=True)

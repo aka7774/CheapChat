@@ -26,7 +26,6 @@ def sig_handler(signum, frame) -> None:
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
 gr.mount_gradio_app(app, demo, path="/gradio")
 
 app.add_middleware(

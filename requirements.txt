@@ -1,33 +1,6 @@
-# WebAPI Server
-uvicorn
 fastapi
-gradio
-# LLM
-transformers
-accelerate
-sentencepiece
-bitsandbytes
-scipy
-tiktoken
-einops
-transformers_stream_generator
-protobuf
-# RAG
-langchain
-sentence-transformers
-# ChatGPT
+uvicorn
+python-multipart
 openai
-# Claude3
 anthropic
-# Comment
-websocket
-websocket-client
-rel
-pytchat
-more_itertools
-# sd
-diffusers
-opencv-python
-pytorch_lightning
-torch
-torchvision
+google-generativeai

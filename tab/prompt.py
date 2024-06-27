@@ -24,19 +24,20 @@ def fn_load(name):
     opt = func.prompt.load_options(name)
     opt = SimpleNamespace(**opt)
 
-    return instruction, opt.location, opt.endpoint, opt.model, opt.dtype, opt.is_messages, opt.template, opt.input_tokens, opt.output_tokens, opt.temperature, opt.top_p, opt.top_k, opt.repetition_penalty
+    return instruction, opt.provider, opt.endpoint, opt.model, opt.qtype, opt.dtype, opt.inst_template, opt.chat_template, opt.input_tokens, opt.max_new_tokens, opt.temperature, opt.top_p, opt.top_k, opt.repetition_penalty
 
-def fn_save(prompt_name, instruction, location, endpoint, model, dtype, is_messages, template, input_tokens, output_tokens, temperature, top_p, top_k, repetition_penalty):
+def fn_save(prompt_name, instruction, provider, endpoint, model, qtype, dtype, inst_template, chat_template, input_tokens, max_new_tokens, temperature, top_p, top_k, repetition_penalty):
     func.prompt.save_prompt(prompt_name, instruction)
     opt = {
-        'location': location,
+        'provider': provider,
         'endpoint': endpoint,
         'model': model,
+        'qtype': qtype,
         'dtype': dtype,
-        'is_messages': is_messages,
-        'template': template,
+        'inst_template': inst_template,
+        'chat_template': chat_template,
         'input_tokens': int(input_tokens),
-        'output_tokens': int(output_tokens),
+        'max_new_tokens': int(max_new_tokens),
         'temperature': float(temperature),
         'top_p': float(top_p),
         'top_k': int(top_k),
@@ -46,16 +47,17 @@ def fn_save(prompt_name, instruction, location, endpoint, model, dtype, is_messa
     
     return 'saved.'
 
-def fn_chat(instruction, user_input, location, endpoint, model, dtype, is_messages, template, input_tokens, output_tokens, temperature, top_p, top_k, repetition_penalty):
+def fn_chat(instruction, user_input, provider, endpoint, model, qtype, dtype, inst_template, chat_template, input_tokens, max_new_tokens, temperature, top_p, top_k, repetition_penalty):
     opt = {
-        'location': location,
+        'provider': provider,
         'endpoint': endpoint,
         'model': model,
+        'qtype': qtype,
         'dtype': dtype,
-        'is_messages': is_messages,
-        'template': template,
+        'inst_template': inst_template,
+        'chat_template': chat_template,
         'input_tokens': int(input_tokens),
-        'output_tokens': int(output_tokens),
+        'max_new_tokens': int(max_new_tokens),
         'temperature': float(temperature),
         'top_p': float(top_p),
         'top_k': int(top_k),
@@ -96,10 +98,10 @@ def gr_tab(gr):
 
             with gr.Row():
                 with gr.Column(scale=1):
-                    location = gr.Radio(
-                        choices=['Local', 'OpenAI', 'Llama.cpp', 'Anthropic', 'Google'],
-                        value=opt['location'],
-                        label='location',
+                    provider = gr.Radio(
+                        choices=['trllm', 'ollama', 'openai', 'anthropic', 'googleai'],
+                        value=opt['provider'],
+                        label='provider',
                         show_label=True,
                         interactive=True,
                         )
@@ -117,28 +119,32 @@ def gr_tab(gr):
                         interactive=True,
                         show_copy_button=True,
                     )
-
+                    qtype = gr.Dropdown(
+                        value=opt['qtype'],
+                        choices=['', 'bnb', 'gptq', 'gguf', 'awq'],
+                        label='qtype',
+                        interactive=True,
+                    )
                     dtype = gr.Dropdown(
                         value=opt['dtype'],
-                        choices=['', 'int4','int8','fp16', 'bf16'],
+                        choices=['', '4bit', '8bit', 'fp16', 'bf16'],
                         label='dtype',
-                        show_label=True,
                         interactive=True,
                         allow_custom_value=True,
                     )
-                    template = gr.Textbox(
-                        value=opt['template'],
-                        lines=3,
-                        label='template',
-                        show_label=True,
+                    inst_template = gr.Textbox(
+                        value=opt['inst_template'],
+                        lines=10,
+                        label='inst_template',
                         interactive=True,
                         show_copy_button=True,
                         )
-                    is_messages = gr.Checkbox(
-                        value=opt['is_messages'],
-                        label='is_messages',
-                        show_label=True,
+                    chat_template = gr.Textbox(
+                        value=opt['chat_template'],
+                        lines=10,
+                        label='chat_template',
                         interactive=True,
+                        show_copy_button=True,
                         )
                 with gr.Column(scale=1):
                     input_tokens = gr.Textbox(
@@ -148,9 +154,9 @@ def gr_tab(gr):
                         interactive=True,
                         show_copy_button=True,
                         )
-                    output_tokens = gr.Textbox(
-                        value=opt['output_tokens'],
-                        label='output_tokens',
+                    max_new_tokens = gr.Textbox(
+                        value=opt['max_new_tokens'],
+                        label='max_new_tokens',
                         show_label=True,
                         interactive=True,
                         show_copy_button=True,
@@ -186,7 +192,7 @@ def gr_tab(gr):
             with gr.Accordion('Preset', open=False):
                 ds = gr.Dataset(
                     samples=fn_ds(),
-                    components=[location, endpoint, model, dtype, is_messages, template, input_tokens, output_tokens, temperature, top_p, top_k, repetition_penalty],
+                    components=[provider, endpoint, model, qtype, dtype, inst_template, chat_template, input_tokens, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
                     samples_per_page = -1,
                 )
                 #create_refresh_button(gr, ds, lambda: None, lambda: {'samples': fn_ds()}, 'refresh-button', interactive=True)
@@ -222,17 +228,17 @@ def gr_tab(gr):
     load_button.click(
         fn=fn_load,
         inputs=[prompt_name],
-        outputs=[instruction, location, endpoint, model, dtype, is_messages, template, input_tokens, output_tokens, temperature, top_p, top_k, repetition_penalty],
+        outputs=[instruction, provider, endpoint, model, qtype, dtype, inst_template, chat_template, input_tokens, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
         )
 
     save_button.click(
         fn=fn_save,
-        inputs=[prompt_name, instruction, location, endpoint, model, dtype, is_messages, template, input_tokens, output_tokens, temperature, top_p, top_k, repetition_penalty],
+        inputs=[prompt_name, instruction, provider, endpoint, model, qtype, dtype, inst_template, chat_template, input_tokens, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
         outputs=[info],
         )
 
     chat_button.click(
         fn=fn_chat,
-        inputs=[instruction, user_input, location, endpoint, model, dtype, is_messages, template, input_tokens, output_tokens, temperature, top_p, top_k, repetition_penalty],
+        inputs=[instruction, user_input, provider, endpoint, model, qtype, dtype, inst_template, chat_template, input_tokens, max_new_tokens, temperature, top_p, top_k, repetition_penalty],
         outputs=[said, detail, time],
         )
