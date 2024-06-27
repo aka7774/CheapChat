@@ -48,7 +48,7 @@ LLMごとに微妙に定義が違うのだけど、akachatでは次のように�
 
 - instruction LLMに指示するためのテキスト SYS とか system と呼ばれる
 - options trllm に渡して model.generate() に入れるパラメタなど
-- inst_template Llama2系で言う <s> [INST] から始まる文字列
+- inst_template Llama2系で言う &lt;s&gt; [INST] から始まる文字列
 - chat_template tokenizer.chat_template
 - prompt 上記すべてのセット
 
